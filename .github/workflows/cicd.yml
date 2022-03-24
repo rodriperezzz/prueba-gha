@@ -26,7 +26,7 @@ jobs:
       run: |
         mkdir -p ~/.kube/
         echo $KUBE_CONFIG_DATA | base64 -di > ~/.kube/config
-        
+        minikube start
         kubectl create ns ngrok-operator
         git clone https://github.com/zufardhiyaulhaq/ngrok-operator.git
         cd ngrok-operator
