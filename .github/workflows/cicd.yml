@@ -26,6 +26,7 @@ jobs:
       run: |
         mkdir -p ~/.kube/
         echo $KUBE_CONFIG_DATA | base64 -di > ~/.kube/config
+        minikube start
         cd .kustomize
         kustomize edit set image prueba-gha=${{ github.repository }}:${{ github.sha }}
         kustomize build . | kubectl apply -f -
