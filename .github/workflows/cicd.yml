@@ -55,11 +55,6 @@ jobs:
            ### Live Preview
            :rocket: Released to https://${{steps.environment.outputs.deployUrl}}
         delete-previous-comment: true
-    - name: Comment current pull request
-      uses: alawiii521/current-pr-comment@v1.0
-      with:
-        comment: "Hello world!"
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Add Ngrok URL comment to PR
       uses: unsplash/comment-on-pr@master
       env:
