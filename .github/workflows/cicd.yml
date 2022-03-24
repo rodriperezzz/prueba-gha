@@ -37,15 +37,31 @@ jobs:
         kustomize build . | kubectl apply -f -
         kubectl -n prueba rollout status deployment/prueba-gha
         URL=`kubectl -n prueba get ngrok -o=custom-columns='DATA:status.url' | tail -n1`
-
         while [[ $URL != *"ngrok"* ]]; do
           echo "Still not ready" && sleep 5
           URL=`kubectl -n prueba get ngrok -o=custom-columns='DATA:status.url' | tail -n1`
         done
-
         echo "::set-output name=url::$URL"
+    - name: Comment deploy URL to pull request
+      uses: Beakyn/gha-comment-pull-request@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        description-message: |
+           ----
+           ### Live Preview
+           :rocket: Released to https://${{steps.environment.outputs.deployUrl}}
+        comment-message: |
+           ### Live Preview
+           :rocket: Released to https://${{steps.environment.outputs.deployUrl}}
+        delete-previous-comment: true
+    - name: Comment current pull request
+      uses: alawiii521/current-pr-comment@v1.0
+      with:
+        comment: "Hello world!"
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Add Ngrok URL comment to PR
-    - uses: unsplash/comment-on-pr@master
+      uses: unsplash/comment-on-pr@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
